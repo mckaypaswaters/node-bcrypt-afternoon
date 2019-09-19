@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './Header.css';
+import axios from 'axios'
+import sweet from 'sweetalert2'
 
 export default class Header extends Component {
   constructor() {
@@ -33,6 +35,18 @@ export default class Header extends Component {
 
   register() {
     // axios POST to /auth/register here
+    axios.post('/auth/register', {
+      username: this.state.username,
+      password: this.state.password,
+      isAdmin: this.state.isAdmin
+    }).then(res => {
+      this.setState({username: '', password: ''})
+      this.props.updateUser(res.data)
+    }).catch(err => {
+      this.setState({ username: '', password: '' })
+      sweet.fire(err.response.request.response)
+  })
+
   }
 
   logout() {
